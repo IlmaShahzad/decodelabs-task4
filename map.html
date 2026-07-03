@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safe Map – SafeRoute</title>
+
+  <!-- Leaflet CSS (Free Map - No API Key Needed) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="css/map.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    .user-marker-pulse {
+      width: 18px; height: 18px;
+      background: #e91e8c; border-radius: 50%;
+      border: 3px solid white;
+      box-shadow: 0 0 0 4px rgba(233,30,140,0.3);
+      animation: pulse-map 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse-map {
+      0%,100% { box-shadow: 0 0 0 4px rgba(233,30,140,0.3); }
+      50%      { box-shadow: 0 0 0 12px rgba(233,30,140,0.08); }
+    }
+    .leaflet-routing-container { display: none !important; }
+  </style>
+</head>
+<body style="overflow:hidden;">
+
+<div class="app-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+      <span>Safe<em>Route</em></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html"><i class="fa-solid fa-grid-2"></i> Dashboard</a>
+      <a href="map.html" class="active"><i class="fa-solid fa-map-location-dot"></i> Safe Map</a>
+      <a href="report.html"><i class="fa-solid fa-triangle-exclamation"></i> Report Incident</a>
+      <a href="contacts.html"><i class="fa-solid fa-address-book"></i> Emergency Contacts</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="index.html" class="nav-item" id="logoutBtn" style="color:#f87171;">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main-content" style="margin-left:260px;">
+    <div class="map-layout" style="height:100vh;">
+
+      <!-- Map Sidebar -->
+      <div class="map-sidebar">
+        <div class="map-sidebar-header">
+          <h3><i class="fa-solid fa-route" style="margin-right:8px;"></i>Safe Route Planner</h3>
+          <p>Powered by OpenStreetMap — 100% Free</p>
+        </div>
+        <div class="map-sidebar-body">
+
+          <!-- Route Inputs -->
+          <div class="form-group">
+            <label class="form-label">Origin</label>
+            <div class="route-input-wrap">
+              <span class="input-dot start"></span>
+              <input type="text" class="form-control" id="originInput" placeholder="Your current location" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Destination</label>
+            <div class="route-input-wrap">
+              <span class="input-dot end"></span>
+              <input type="text" class="form-control" id="destinationInput" placeholder="e.g. Lahore Airport" />
+            </div>
+            <div id="destSuggestions" style="display:none;background:white;border:1px solid #e2e8f0;border-radius:8px;margin-top:4px;box-shadow:0 4px 12px rgba(0,0,0,0.1);max-height:200px;overflow-y:auto;position:relative;z-index:999;"></div>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-bottom:16px;">
+            <button class="btn btn-primary w-full" id="getRouteBtn">
+              <i class="fa-solid fa-route"></i> Get Safe Route
+            </button>
+            <button class="btn btn-secondary" id="clearRouteBtn" title="Clear route">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <!-- Safety Score -->
+          <div class="safety-score-card safe" id="safetyScoreCard">
+            <div class="safety-score-label">Route Safety Score</div>
+            <div class="safety-score-value" id="safetyScoreVal">--</div>
+            <div class="safety-score-desc" id="safetyScoreDesc">Enter a route to see safety score</div>
+          </div>
+
+          <!-- Route Info -->
+          <div id="routeInfoBox" style="display:none;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;padding:14px;margin-bottom:14px;">
+            <div style="display:flex;justify-content:space-around;text-align:center;">
+              <div>
+                <div style="font-size:1.1rem;font-weight:800;color:#0f172a;" id="routeDistance">--</div>
+                <div style="font-size:0.75rem;color:#94a3b8;">Distance</div>
+              </div>
+              <div style="width:1px;background:#e2e8f0;"></div>
+              <div>
+                <div style="font-size:1.1rem;font-weight:800;color:#0f172a;" id="routeDuration">--</div>
+                <div style="font-size:0.75rem;color:#94a3b8;">Walk Time</div>
+              </div>
+              <div style="width:1px;background:#e2e8f0;"></div>
+              <div>
+                <div style="font-size:1.1rem;font-weight:800;color:#e91e8c;" id="routeIncidents">0</div>
+                <div style="font-size:0.75rem;color:#94a3b8;">Incidents</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Toggles -->
+          <div class="toggle-wrap">
+            <div>
+              <div class="toggle-label"><i class="fa-solid fa-fire" style="color:#e91e8c;margin-right:6px;"></i>Safety Heatmap</div>
+              <div style="font-size:0.75rem;color:#94a3b8;">Show danger zones</div>
+            </div>
+            <button class="toggle" id="heatmapToggle"></button>
+          </div>
+
+          <div class="toggle-wrap">
+            <div>
+              <div class="toggle-label"><i class="fa-solid fa-circle-exclamation" style="color:#d97706;margin-right:6px;"></i>Incident Markers</div>
+              <div style="font-size:0.75rem;color:#94a3b8;">Show reported incidents</div>
+            </div>
+            <button class="toggle on" id="markersToggle"></button>
+          </div>
+
+          <!-- Legend -->
+          <div class="map-legend">
+            <h5>Map Legend</h5>
+            <div class="legend-item"><div class="legend-dot" style="background:#e91e8c;"></div><span>Your Location</span></div>
+            <div class="legend-item"><div class="legend-dot high"></div><span>High Severity Incident</span></div>
+            <div class="legend-item"><div class="legend-dot medium"></div><span>Medium Severity Incident</span></div>
+            <div class="legend-item"><div class="legend-dot low"></div><span>Low Severity Incident</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#dc2626;"></div><span>Hospital</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#0891b2;"></div><span>Police Station</span></div>
+          </div>
+
+          <!-- Nearby Places -->
+          <div class="places-section">
+            <h4><i class="fa-solid fa-hospital" style="color:#dc2626;margin-right:6px;"></i>Nearby Hospitals</h4>
+            <div id="hospitalsList">
+              <div style="font-size:0.82rem;color:#94a3b8;padding:8px 0;">Allow location to see nearby hospitals</div>
+            </div>
+            <h4 style="margin-top:16px;"><i class="fa-solid fa-shield-halved" style="color:#0891b2;margin-right:6px;"></i>Nearby Police Stations</h4>
+            <div id="policeList">
+              <div style="font-size:0.82rem;color:#94a3b8;padding:8px 0;">Allow location to see nearby stations</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Map Container -->
+      <div class="map-container" style="position:relative;flex:1;">
+        <div id="leaflet-map" style="width:100%;height:100%;"></div>
+
+        <!-- Controls overlay -->
+        <div class="map-controls">
+          <button class="map-ctrl-btn" id="myLocationBtn" title="My Location">
+            <i class="fa-solid fa-location-crosshairs"></i>
+          </button>
+          <button class="map-ctrl-btn" title="Report Incident" onclick="window.location.href='report.html'">
+            <i class="fa-solid fa-triangle-exclamation" style="color:#e91e8c;"></i>
+          </button>
+          <button class="map-ctrl-btn" id="refreshBtn" title="Refresh incidents">
+            <i class="fa-solid fa-rotate"></i>
+          </button>
+        </div>
+
+        <!-- Loading overlay -->
+        <div id="mapLoading" style="position:absolute;inset:0;background:rgba(15,23,42,0.78);display:flex;align-items:center;justify-content:center;z-index:1000;flex-direction:column;gap:16px;">
+          <div style="width:52px;height:52px;border:3px solid rgba(255,255,255,0.2);border-top-color:#e91e8c;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+          <p style="color:rgba(255,255,255,0.85);font-size:0.9rem;font-family:Inter,sans-serif;">Loading SafeRoute map...</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Leaflet JS (Free, No API Key) -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- Leaflet Routing Machine (uses OSRM free routing) -->
+<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
+<!-- Leaflet Heat (heatmap layer) -->
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+
+<script src="js/auth.js"></script>
+<script src="js/map.js"></script>
+</body>
+</html>

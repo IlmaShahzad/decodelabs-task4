@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard – SafeRoute</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+<div class="app-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+      <span>Safe<em>Route</em></span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a href="dashboard.html" class="active"><i class="fa-solid fa-grid-2"></i> Dashboard</a>
+      <a href="map.html"><i class="fa-solid fa-map-location-dot"></i> Safe Map</a>
+      <a href="report.html"><i class="fa-solid fa-triangle-exclamation"></i> Report Incident</a>
+      <a href="contacts.html"><i class="fa-solid fa-address-book"></i> Emergency Contacts</a>
+
+      <div class="nav-section-label" style="margin-top:10px;">History</div>
+      <a href="#" id="sosHistoryLink"><i class="fa-solid fa-clock-rotate-left"></i> SOS History</a>
+      <a href="#" id="myReportsLink"><i class="fa-solid fa-file-lines"></i> My Reports</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="user-info-sidebar">
+        <div class="user-avatar" id="avatarInitial">U</div>
+        <div>
+          <div class="user-name" id="sidebarName">Loading...</div>
+          <div class="user-role">User Account</div>
+        </div>
+      </div>
+      <a href="index.html" class="nav-item" id="logoutBtn" style="color:#f87171;">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="topbar">
+      <div class="topbar-left">
+        <h1 id="greetingText">Good morning 👋</h1>
+        <p id="greetingDate">Loading...</p>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn" title="Notifications">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notif-dot"></span>
+        </button>
+        <a href="map.html" class="btn btn-primary btn-sm"><i class="fa-solid fa-route"></i> Safe Route</a>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <!-- Location Card -->
+      <div class="location-card">
+        <div class="loc-icon"><i class="fa-solid fa-location-dot"></i></div>
+        <div class="loc-text">
+          <h4>Your Current Location</h4>
+          <p id="currentLocationText">Detecting location...</p>
+        </div>
+        <div style="margin-left:auto;">
+          <a href="map.html" class="btn btn-outline-white btn-sm"><i class="fa-solid fa-map"></i> View Map</a>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon pink"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div class="stat-info">
+            <div class="stat-num" id="myReportsCount">0</div>
+            <div class="stat-label">My Reports</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red"><i class="fa-solid fa-bell"></i></div>
+          <div class="stat-info">
+            <div class="stat-num" id="sosAlertsCount">0</div>
+            <div class="stat-label">SOS Alerts</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple"><i class="fa-solid fa-users"></i></div>
+          <div class="stat-info">
+            <div class="stat-num" id="contactsCount">0</div>
+            <div class="stat-label">Emergency Contacts</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="stat-info">
+            <div class="stat-num" id="safetyScore">85</div>
+            <div class="stat-label">Safety Score</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOS Section -->
+      <div class="sos-section">
+        <h3><i class="fa-solid fa-exclamation-triangle"></i> Emergency SOS</h3>
+        <p>Press and hold for 2 seconds to send an SOS alert to all your emergency contacts with your current GPS location.</p>
+        <button class="sos-button" id="sosBtn" title="Hold for 2s to trigger SOS">
+          <i class="fa-solid fa-exclamation"></i>
+          <span>SOS</span>
+        </button>
+        <p style="margin-top:16px;font-size:0.78rem;color:#94a3b8;text-align:center;" id="sosStatus">Ready to trigger</p>
+      </div>
+
+      <!-- Dashboard Grid -->
+      <div class="dashboard-grid">
+
+        <!-- Recent Incidents -->
+        <div class="card">
+          <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;">
+            <h3><i class="fa-solid fa-fire" style="color:#e91e8c;margin-right:8px;font-size:0.9rem;"></i>Nearby Incidents</h3>
+            <a href="map.html" class="btn btn-secondary btn-sm">View Map</a>
+          </div>
+          <div class="card-body" style="padding:0 16px;">
+            <div id="incidentsList">
+              <div style="text-align:center;padding:24px;color:#94a3b8;font-size:0.875rem;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size:1.5rem;margin-bottom:10px;display:block;"></i>
+                Loading nearby incidents...
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div>
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-bolt" style="color:#d97706;margin-right:8px;font-size:0.9rem;"></i>Quick Actions</h3>
+            </div>
+            <div class="card-body">
+              <div class="quick-actions">
+                <a href="map.html" class="quick-action-btn">
+                  <div class="qa-icon" style="background:#ede9fe;color:#7c3aed;"><i class="fa-solid fa-route"></i></div>
+                  <div>
+                    <div class="qa-label">Safe Route</div>
+                    <div class="qa-sub">Find safest path</div>
+                  </div>
+                </a>
+                <a href="report.html" class="quick-action-btn">
+                  <div class="qa-icon" style="background:#fce4ec;color:#e91e8c;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                  <div>
+                    <div class="qa-label">Report Incident</div>
+                    <div class="qa-sub">Alert community</div>
+                  </div>
+                </a>
+                <button class="quick-action-btn" id="findHospitalBtn">
+                  <div class="qa-icon" style="background:#dcfce7;color:#16a34a;"><i class="fa-solid fa-hospital"></i></div>
+                  <div>
+                    <div class="qa-label">Find Hospital</div>
+                    <div class="qa-sub">Nearest facility</div>
+                  </div>
+                </button>
+                <button class="quick-action-btn" id="findPoliceBtn">
+                  <div class="qa-icon" style="background:#e0f2fe;color:#0891b2;"><i class="fa-solid fa-shield-halved"></i></div>
+                  <div>
+                    <div class="qa-label">Find Police</div>
+                    <div class="qa-sub">Nearest station</div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Safety Tips -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-lightbulb" style="color:#f59e0b;margin-right:8px;font-size:0.9rem;"></i>Safety Tips</h3>
+            </div>
+            <div class="card-body" style="padding:16px;">
+              <div id="safetyTip" style="font-size:0.875rem;color:#475569;line-height:1.6;background:#f8fafc;border-radius:10px;padding:14px;border-left:3px solid #e91e8c;">
+                Always share your travel plans with a trusted contact before leaving.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="js/auth.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

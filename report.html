@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Report Incident – SafeRoute</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+<div class="app-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+      <span>Safe<em>Route</em></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html"><i class="fa-solid fa-grid-2"></i> Dashboard</a>
+      <a href="map.html"><i class="fa-solid fa-map-location-dot"></i> Safe Map</a>
+      <a href="report.html" class="active"><i class="fa-solid fa-triangle-exclamation"></i> Report Incident</a>
+      <a href="contacts.html"><i class="fa-solid fa-address-book"></i> Emergency Contacts</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="index.html" class="nav-item" id="logoutBtn" style="color:#f87171;">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+    <div class="topbar">
+      <div class="topbar-left">
+        <h1><i class="fa-solid fa-triangle-exclamation" style="color:#e91e8c;margin-right:8px;"></i>Report an Incident</h1>
+        <p>Help keep your community safe by reporting unsafe situations</p>
+      </div>
+      <div class="topbar-right">
+        <a href="map.html" class="btn btn-secondary btn-sm"><i class="fa-solid fa-map"></i> View Map</a>
+      </div>
+    </div>
+
+    <div class="page-content">
+      <div style="max-width:700px;margin:0 auto;">
+
+        <div id="alertBox"></div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Incident Details</h3>
+            <p style="font-size:0.82rem;margin-top:4px;">All reports are reviewed by our team. Anonymous reporting is available.</p>
+          </div>
+          <div class="card-body">
+            <form id="reportForm">
+
+              <!-- Incident Type -->
+              <div class="form-group">
+                <label class="form-label">Incident Type <span style="color:#dc2626;">*</span></label>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;" id="typeSelector">
+                  <button type="button" class="type-btn" data-type="harassment">
+                    <i class="fa-solid fa-user-slash" style="font-size:1.2rem;margin-bottom:4px;display:block;"></i>
+                    Harassment
+                  </button>
+                  <button type="button" class="type-btn" data-type="theft">
+                    <i class="fa-solid fa-hand" style="font-size:1.2rem;margin-bottom:4px;display:block;"></i>
+                    Theft
+                  </button>
+                  <button type="button" class="type-btn" data-type="assault">
+                    <i class="fa-solid fa-person-falling-burst" style="font-size:1.2rem;margin-bottom:4px;display:block;"></i>
+                    Assault
+                  </button>
+                  <button type="button" class="type-btn" data-type="suspicious_activity">
+                    <i class="fa-solid fa-eye" style="font-size:1.2rem;margin-bottom:4px;display:block;"></i>
+                    Suspicious
+                  </button>
+                  <button type="button" class="type-btn" data-type="poor_lighting">
+                    <i class="fa-solid fa-moon" style="font-size:1.2rem;margin-bottom:4px;display:block;"></i>
+                    Poor Lighting
+                  </button>
+                  <button type="button" class="type-btn" data-type="other">
+                    <i class="fa-solid fa-ellipsis" style="font-size:1.2rem;margin-bottom:4px;display:block;"></i>
+                    Other
+                  </button>
+                </div>
+                <input type="hidden" id="selectedType" />
+              </div>
+
+              <!-- Description -->
+              <div class="form-group">
+                <label class="form-label">Description <span style="color:#dc2626;">*</span></label>
+                <textarea class="form-control" id="description" rows="4" placeholder="Describe what happened, when it occurred, and any other relevant details that could help others stay safe..." maxlength="1000"></textarea>
+                <span style="font-size:0.75rem;color:#94a3b8;" id="charCount">0 / 1000 characters</span>
+              </div>
+
+              <!-- Severity -->
+              <div class="form-group">
+                <label class="form-label">Severity Level <span style="color:#dc2626;">*</span></label>
+                <div class="severity-selector">
+                  <button type="button" class="severity-btn low active" data-sev="low">
+                    <i class="fa-solid fa-circle-check"></i><br>Low
+                  </button>
+                  <button type="button" class="severity-btn medium" data-sev="medium">
+                    <i class="fa-solid fa-circle-exclamation"></i><br>Medium
+                  </button>
+                  <button type="button" class="severity-btn high" data-sev="high">
+                    <i class="fa-solid fa-circle-xmark"></i><br>High
+                  </button>
+                </div>
+                <input type="hidden" id="selectedSeverity" value="low" />
+              </div>
+
+              <!-- Location -->
+              <div class="form-group">
+                <label class="form-label">Incident Location <span style="color:#dc2626;">*</span></label>
+                <div style="display:flex;gap:8px;">
+                  <input type="text" class="form-control" id="locationAddress" placeholder="Enter address or use current location" style="flex:1;" />
+                  <button type="button" class="btn btn-secondary" id="detectLocationBtn" title="Use my current location">
+                    <i class="fa-solid fa-location-crosshairs"></i>
+                  </button>
+                </div>
+                <div style="display:flex;gap:12px;margin-top:8px;">
+                  <div style="flex:1;">
+                    <input type="number" class="form-control" id="lat" placeholder="Latitude" step="any" readonly style="background:#f8fafc;" />
+                  </div>
+                  <div style="flex:1;">
+                    <input type="number" class="form-control" id="lng" placeholder="Longitude" step="any" readonly style="background:#f8fafc;" />
+                  </div>
+                </div>
+                <span id="locationStatus" style="font-size:0.8rem;color:#94a3b8;margin-top:4px;display:block;"></span>
+              </div>
+
+              <!-- Photo Upload -->
+              <div class="form-group">
+                <label class="form-label">Photos (Optional)</label>
+                <div id="photoDropZone" style="border:2px dashed #e2e8f0;border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:all 0.2s;background:#f8fafc;">
+                  <i class="fa-solid fa-camera" style="font-size:1.5rem;color:#94a3b8;margin-bottom:8px;display:block;"></i>
+                  <p style="font-size:0.875rem;color:#94a3b8;margin:0;">Click to upload or drag and drop</p>
+                  <p style="font-size:0.78rem;color:#cbd5e1;margin:4px 0 0;">PNG, JPG up to 5MB each</p>
+                  <input type="file" id="photoInput" accept="image/*" multiple style="display:none;" />
+                </div>
+                <div id="photoPreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;"></div>
+              </div>
+
+              <!-- Anonymous Toggle -->
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;margin-bottom:20px;">
+                <div>
+                  <div style="font-size:0.875rem;font-weight:600;color:#1e293b;"><i class="fa-solid fa-user-secret" style="margin-right:8px;color:#7c3aed;"></i>Anonymous Report</div>
+                  <div style="font-size:0.78rem;color:#94a3b8;">Your identity will not be shown with this report</div>
+                </div>
+                <button type="button" class="toggle" id="anonToggle"></button>
+              </div>
+              <input type="hidden" id="isAnonymous" value="false" />
+
+              <button type="submit" class="btn btn-primary w-full btn-lg" id="submitBtn">
+                <span id="submitText"><i class="fa-solid fa-paper-plane"></i> Submit Report</span>
+                <span id="submitLoader" class="hidden"><span class="spinner"></span> Submitting...</span>
+              </button>
+
+            </form>
+          </div>
+        </div>
+
+        <!-- My Recent Reports -->
+        <div class="card" style="margin-top:24px;">
+          <div class="card-header">
+            <h3>My Recent Reports</h3>
+          </div>
+          <div class="card-body" style="padding:0;">
+            <div id="myReportsList">
+              <div style="text-align:center;padding:30px;color:#94a3b8;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size:1.5rem;"></i>
+                <p style="margin-top:10px;font-size:0.875rem;">Loading your reports...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<style>
+  .type-btn {
+    padding: 14px 8px; border: 2px solid #e2e8f0; border-radius: 10px;
+    background: white; cursor: pointer; font-size: 0.8rem; font-weight: 600;
+    color: #64748b; font-family: inherit; transition: all 0.2s; text-align: center;
+  }
+  .type-btn:hover { border-color: #e91e8c; color: #e91e8c; background: #fce4ec; }
+  .type-btn.active { border-color: #e91e8c; color: #e91e8c; background: #fce4ec; }
+  #photoDropZone:hover { border-color: #e91e8c; background: #fce4ec30; }
+  .preview-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 2px solid #e2e8f0; }
+</style>
+
+<script src="js/auth.js"></script>
+<script src="js/report.js"></script>
+</body>
+</html>

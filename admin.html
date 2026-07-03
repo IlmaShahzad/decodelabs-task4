@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard – SafeRoute</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="app-layout">
+
+  <!-- Admin Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+      <span>Safe<em>Route</em></span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Admin Panel</div>
+      <a href="#" class="active" data-tab="overview" onclick="switchTab('overview',this)">
+        <i class="fa-solid fa-chart-pie"></i> Overview
+      </a>
+      <a href="#" data-tab="incidents" onclick="switchTab('incidents',this)">
+        <i class="fa-solid fa-triangle-exclamation"></i> Incidents
+      </a>
+      <a href="#" data-tab="users" onclick="switchTab('users',this)">
+        <i class="fa-solid fa-users"></i> Users
+      </a>
+      <a href="#" data-tab="sos" onclick="switchTab('sos',this)">
+        <i class="fa-solid fa-bell"></i> SOS Alerts
+      </a>
+      <div class="nav-section-label" style="margin-top:10px;">Tools</div>
+      <a href="map.html"><i class="fa-solid fa-map-location-dot"></i> Safety Map</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="user-info-sidebar">
+        <div class="user-avatar" style="background:linear-gradient(135deg,#dc2626,#b91c1c);">A</div>
+        <div>
+          <div class="user-name">Admin</div>
+          <div class="user-role">Administrator</div>
+        </div>
+      </div>
+      <a href="login.html" class="nav-item" id="logoutBtn" style="color:#f87171;">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+    <div class="topbar">
+      <div class="topbar-left">
+        <h1 id="tabTitle"><i class="fa-solid fa-chart-pie" style="color:#e91e8c;margin-right:8px;"></i>Admin Overview</h1>
+        <p id="tabSubtitle">Platform statistics and safety insights</p>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-secondary btn-sm" onclick="loadAdminData()">
+          <i class="fa-solid fa-rotate"></i> Refresh
+        </button>
+        <a href="map.html" class="btn btn-primary btn-sm"><i class="fa-solid fa-map"></i> View Map</a>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <!-- ===== OVERVIEW TAB ===== -->
+      <div id="tab-overview" class="tab-pane active">
+
+        <!-- Stats Row -->
+        <div class="admin-stat-row">
+          <div class="stat-card">
+            <div class="stat-icon pink"><i class="fa-solid fa-users"></i></div>
+            <div class="stat-info">
+              <div class="stat-num" id="totalUsers">0</div>
+              <div class="stat-label">Total Users</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon orange"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div class="stat-info">
+              <div class="stat-num" id="totalIncidents">0</div>
+              <div class="stat-label">Total Incidents</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon red"><i class="fa-solid fa-bell"></i></div>
+            <div class="stat-info">
+              <div class="stat-num" id="activeAlerts">0</div>
+              <div class="stat-label">Active Alerts</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon green"><i class="fa-solid fa-check-circle"></i></div>
+            <div class="stat-info">
+              <div class="stat-num" id="verifiedIncidents">0</div>
+              <div class="stat-label">Verified Incidents</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+          <div class="chart-card">
+            <div class="card-header">
+              <h3>Incidents by Type</h3>
+              <span class="badge badge-secondary">All Time</span>
+            </div>
+            <div class="chart-body">
+              <canvas id="typeChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="card-header">
+              <h3>Incidents by Severity</h3>
+              <span class="badge badge-secondary">All Time</span>
+            </div>
+            <div class="chart-body">
+              <canvas id="severityChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="charts-grid" style="grid-template-columns:2fr 1fr;">
+          <div class="chart-card">
+            <div class="card-header">
+              <h3>Daily Incident Trend (Last 7 Days)</h3>
+            </div>
+            <div class="chart-body">
+              <canvas id="trendChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="card-header">
+              <h3>High Risk Areas</h3>
+            </div>
+            <div class="chart-body" style="overflow-y:auto;height:260px;">
+              <div id="highRiskAreas">
+                <div style="text-align:center;padding:30px;color:#94a3b8;font-size:0.875rem;">
+                  Loading area data...
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ===== INCIDENTS TAB ===== -->
+      <div id="tab-incidents" class="tab-pane" style="display:none;">
+        <div class="filter-bar">
+          <select class="filter-select" id="incidentStatusFilter" onchange="filterIncidents()">
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="verified">Verified</option>
+            <option value="rejected">Rejected</option>
+          </select>
+          <select class="filter-select" id="incidentSeverityFilter" onchange="filterIncidents()">
+            <option value="">All Severity</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+          <div class="search-bar">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" id="incidentSearch" placeholder="Search incidents..." oninput="filterIncidents()" />
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Description</th>
+                  <th>Location</th>
+                  <th>Severity</th>
+                  <th>Status</th>
+                  <th>Reported</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="incidentsTable">
+                <tr>
+                  <td colspan="7" style="text-align:center;padding:30px;color:#94a3b8;">
+                    <i class="fa-solid fa-spinner fa-spin"></i> Loading incidents...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== USERS TAB ===== -->
+      <div id="tab-users" class="tab-pane" style="display:none;">
+        <div class="filter-bar">
+          <div class="search-bar">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" id="userSearch" placeholder="Search users..." oninput="filterUsers()" />
+          </div>
+        </div>
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Joined</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="usersTable">
+                <tr>
+                  <td colspan="7" style="text-align:center;padding:30px;color:#94a3b8;">
+                    <i class="fa-solid fa-spinner fa-spin"></i> Loading users...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SOS ALERTS TAB ===== -->
+      <div id="tab-sos" class="tab-pane" style="display:none;">
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Location</th>
+                  <th>Contacts Notified</th>
+                  <th>Status</th>
+                  <th>Triggered At</th>
+                </tr>
+              </thead>
+              <tbody id="sosAlertsTable">
+                <tr>
+                  <td colspan="5" style="text-align:center;padding:30px;color:#94a3b8;">
+                    <i class="fa-solid fa-spinner fa-spin"></i> Loading SOS alerts...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="js/auth.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

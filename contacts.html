@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emergency Contacts – SafeRoute</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+<div class="app-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+      <span>Safe<em>Route</em></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html"><i class="fa-solid fa-grid-2"></i> Dashboard</a>
+      <a href="map.html"><i class="fa-solid fa-map-location-dot"></i> Safe Map</a>
+      <a href="report.html"><i class="fa-solid fa-triangle-exclamation"></i> Report Incident</a>
+      <a href="contacts.html" class="active"><i class="fa-solid fa-address-book"></i> Emergency Contacts</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="index.html" class="nav-item" id="logoutBtn" style="color:#f87171;">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+    <div class="topbar">
+      <div class="topbar-left">
+        <h1><i class="fa-solid fa-address-book" style="color:#e91e8c;margin-right:8px;"></i>Emergency Contacts</h1>
+        <p>People who will be notified when you trigger an SOS alert</p>
+      </div>
+    </div>
+
+    <div class="page-content">
+      <div style="max-width:800px;margin:0 auto;">
+
+        <!-- Info Banner -->
+        <div class="alert alert-info" style="margin-bottom:20px;">
+          <i class="fa-solid fa-circle-info" style="font-size:1.1rem;flex-shrink:0;"></i>
+          <div>You can add up to <strong>5 emergency contacts</strong>. Contacts with "Notify on SOS" enabled will receive an email alert with your GPS location when you trigger an SOS.</div>
+        </div>
+
+        <!-- Add Contact Card -->
+        <div class="card" style="margin-bottom:24px;">
+          <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;">
+            <h3><i class="fa-solid fa-user-plus" style="color:#e91e8c;margin-right:8px;font-size:0.9rem;"></i>Add Emergency Contact</h3>
+            <span class="badge badge-secondary" id="contactCount">0 / 5</span>
+          </div>
+          <div class="card-body">
+            <div id="addAlertBox"></div>
+            <form id="addContactForm">
+              <div class="grid-2">
+                <div class="form-group">
+                  <label class="form-label">Full Name <span style="color:#dc2626;">*</span></label>
+                  <div class="input-icon-wrap">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" class="form-control" id="contactName" placeholder="Jane Doe" required />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Phone Number <span style="color:#dc2626;">*</span></label>
+                  <div class="input-icon-wrap">
+                    <i class="fa-solid fa-phone"></i>
+                    <input type="tel" class="form-control" id="contactPhone" placeholder="+92 300 0000000" required />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Email Address</label>
+                  <div class="input-icon-wrap">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" class="form-control" id="contactEmail" placeholder="jane@example.com" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Relationship</label>
+                  <select class="form-control" id="contactRelationship">
+                    <option value="family">Family</option>
+                    <option value="friend">Friend</option>
+                    <option value="colleague">Colleague</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;margin-bottom:16px;">
+                <div>
+                  <div style="font-size:0.875rem;font-weight:600;color:#1e293b;">Notify on SOS Alert</div>
+                  <div style="font-size:0.78rem;color:#94a3b8;">Send email when SOS is triggered</div>
+                </div>
+                <button type="button" class="toggle on" id="notifyToggle"></button>
+              </div>
+              <input type="hidden" id="notifyOnSOS" value="true" />
+
+              <button type="submit" class="btn btn-primary" id="addContactBtn">
+                <span id="addBtnText"><i class="fa-solid fa-plus"></i> Add Contact</span>
+                <span id="addBtnLoader" class="hidden"><span class="spinner"></span> Adding...</span>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Contacts List -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Your Emergency Contacts</h3>
+          </div>
+          <div id="contactsList">
+            <div style="text-align:center;padding:40px;color:#94a3b8;">
+              <i class="fa-solid fa-spinner fa-spin" style="font-size:1.5rem;"></i>
+              <p style="margin-top:12px;font-size:0.875rem;">Loading contacts...</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Edit Modal -->
+<div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;">
+  <div class="card" style="width:100%;max-width:500px;margin:20px;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;">
+      <h3>Edit Contact</h3>
+      <button onclick="closeEditModal()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:#94a3b8;"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="card-body">
+      <form id="editContactForm">
+        <input type="hidden" id="editContactId" />
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-control" id="editName" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone</label>
+          <input type="tel" class="form-control" id="editPhone" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" id="editEmail" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Relationship</label>
+          <select class="form-control" id="editRelationship">
+            <option value="family">Family</option>
+            <option value="friend">Friend</option>
+            <option value="colleague">Colleague</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+          <button type="button" onclick="closeEditModal()" class="btn btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<style>
+  .contact-card {
+    display: flex; align-items: center; gap: 16px;
+    padding: 18px 20px; border-bottom: 1px solid #f1f5f9;
+    transition: background 0.2s;
+  }
+  .contact-card:last-child { border-bottom: none; }
+  .contact-card:hover { background: #f8fafc; }
+  .contact-avatar {
+    width: 46px; height: 46px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 1rem; color: white; flex-shrink: 0;
+  }
+  .contact-name { font-size: 0.9rem; font-weight: 700; color: #0f172a; }
+  .contact-meta { font-size: 0.8rem; color: #64748b; display: flex; gap: 12px; flex-wrap: wrap; margin-top: 2px; }
+  .contact-actions { display: flex; gap: 8px; margin-left: auto; flex-shrink: 0; }
+  #editModal.show { display: flex !important; }
+</style>
+
+<script src="js/auth.js"></script>
+<script src="js/contacts.js"></script>
+</body>
+</html>

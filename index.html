@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SafeRoute – Intelligent Women's Safety System</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .hero-grid { display: grid; grid-template-columns: 1fr 420px; gap: 60px; align-items: center; }
+    .floating-cards { position: absolute; inset: 0; pointer-events: none; }
+    .f-card {
+      position: absolute; background: rgba(255,255,255,0.08); backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 12px 16px;
+      color: white; font-size: 0.8rem; display: flex; align-items: center; gap: 10px;
+      animation: float 3s ease-in-out infinite;
+    }
+    .f-card:nth-child(1) { top: 20%; right: -20px; animation-delay: 0s; }
+    .f-card:nth-child(2) { bottom: 30%; left: -20px; animation-delay: 1s; }
+    .f-card:nth-child(3) { top: 60%; right: -10px; animation-delay: 2s; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    .hero-stats { display: flex; gap: 32px; margin-top: 36px; }
+    .hero-stat-item .num { font-size: 1.8rem; font-weight: 800; color: white; }
+    .hero-stat-item .lbl { font-size: 0.8rem; color: rgba(255,255,255,0.55); }
+    .bg-light { background: var(--gray-1); }
+    .partners { display: flex; align-items: center; gap: 32px; flex-wrap: wrap; opacity: 0.5; margin-top: 24px; }
+    .partner-logo { font-size: 0.9rem; font-weight: 700; color: white; letter-spacing: 1px; }
+    .cta-section {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      padding: 80px 0; text-align: center;
+    }
+    .mobile-menu-btn { display: none; background: none; border: none; color: white; font-size: 1.4rem; cursor: pointer; }
+    .navbar.scrolled .mobile-menu-btn { color: var(--text); }
+    @media (max-width: 768px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .mobile-menu-btn { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <i class="fa-solid fa-shield-halved"></i>
+        Safe<span>Route</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#stats">Impact</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="register.html" class="btn btn-primary btn-sm">Get Started Free</a>
+        <button class="mobile-menu-btn" id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <i class="fa-solid fa-circle-check"></i>
+            Trusted Safety Platform
+          </div>
+          <h1>Your Safety,<br /><span>Our Priority</span></h1>
+          <p class="lead">SafeRoute combines emergency response, real-time location sharing, and AI-powered safe route recommendations to help women travel confidently.</p>
+          <div class="hero-buttons">
+            <a href="register.html" class="btn btn-primary btn-lg">
+              <i class="fa-solid fa-shield-halved"></i> Start Staying Safe
+            </a>
+            <a href="#features" class="btn btn-outline-white btn-lg">
+              <i class="fa-solid fa-play-circle"></i> See Features
+            </a>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat-item">
+              <div class="num">10K+</div>
+              <div class="lbl">Protected Users</div>
+            </div>
+            <div class="hero-stat-item">
+              <div class="num">5K+</div>
+              <div class="lbl">Incidents Reported</div>
+            </div>
+            <div class="hero-stat-item">
+              <div class="num">99%</div>
+              <div class="lbl">SOS Delivery Rate</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-image">
+          <div class="hero-phone-mockup" style="position:relative;">
+            <div class="floating-cards">
+              <div class="f-card"><i class="fa-solid fa-location-dot" style="color:#f48fb1;"></i> Live location active</div>
+              <div class="f-card"><i class="fa-solid fa-route" style="color:#a78bfa;"></i> Safe route found</div>
+              <div class="f-card"><i class="fa-solid fa-bell" style="color:#fbbf24;"></i> Alert sent to 3 contacts</div>
+            </div>
+            <div class="sos-demo-btn">
+              <i class="fa-solid fa-exclamation" style="font-size:2.2rem;"></i>
+              <span>SOS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section bg-light" id="features">
+    <div class="container text-center">
+      <div class="section-tag">Features</div>
+      <h2 class="section-title">Everything You Need to Stay Safe</h2>
+      <p class="section-subtitle">A complete safety ecosystem that works before, during, and after an emergency.</p>
+      <div class="grid-3">
+        <div class="feature-card">
+          <div class="feature-icon" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
+            <i class="fa-solid fa-bell" style="color:#e91e8c;"></i>
+          </div>
+          <h3>One-Tap SOS Alert</h3>
+          <p>Instantly notify all your emergency contacts with your live location in a single tap.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:linear-gradient(135deg,#ede9fe,#ddd6fe);">
+            <i class="fa-solid fa-route" style="color:#7c3aed;"></i>
+          </div>
+          <h3>Safe Route Navigation</h3>
+          <p>Get route recommendations based on community incident reports and real-time safety data.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0);">
+            <i class="fa-solid fa-location-dot" style="color:#16a34a;"></i>
+          </div>
+          <h3>Live Location Sharing</h3>
+          <p>Share your real-time location with trusted contacts so they always know you're safe.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);">
+            <i class="fa-solid fa-triangle-exclamation" style="color:#d97706;"></i>
+          </div>
+          <h3>Incident Reporting</h3>
+          <p>Report unsafe areas, harassment, or suspicious activity to protect the whole community.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:linear-gradient(135deg,#e0f2fe,#bae6fd);">
+            <i class="fa-solid fa-fire" style="color:#0891b2;"></i>
+          </div>
+          <h3>Safety Heatmaps</h3>
+          <p>Visualise danger zones on an interactive map to make informed travel decisions.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:linear-gradient(135deg,#fce4ec,#fbb6ce);">
+            <i class="fa-solid fa-users" style="color:#e91e8c;"></i>
+          </div>
+          <h3>Emergency Contacts</h3>
+          <p>Manage up to 5 trusted contacts who get instant alerts with your GPS location.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);">
+            <i class="fa-solid fa-hospital" style="color:#16a34a;"></i>
+          </div>
+          <h3>Nearby Hospitals</h3>
+          <p>Locate the nearest hospitals and emergency services on the map instantly.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:linear-gradient(135deg,#eff6ff,#dbeafe);">
+            <i class="fa-solid fa-shield-halved" style="color:#2563eb;"></i>
+          </div>
+          <h3>Nearby Police Stations</h3>
+          <p>Find the closest police stations when you need official assistance.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:linear-gradient(135deg,#fdf2f8,#fce7f3);">
+            <i class="fa-solid fa-chart-line" style="color:#db2777;"></i>
+          </div>
+          <h3>Safety Analytics</h3>
+          <p>Authorities and admins get data-driven insights to improve public safety infrastructure.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="section steps-section" id="how-it-works">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:50px;">
+        <div class="section-tag">How It Works</div>
+        <h2 class="section-title text-white">Simple. Fast. Reliable.</h2>
+        <p class="section-subtitle" style="color:rgba(255,255,255,0.6);">Three simple steps to a safer journey</p>
+      </div>
+      <div style="max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:32px;">
+        <div class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Set Up Your Safety Network</h3>
+            <p>Register, add up to 5 emergency contacts, and configure your safety preferences in minutes.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Travel with Confidence</h3>
+            <p>Use the safe route navigator to find the safest path based on community reports and heatmap data.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Trigger SOS When Needed</h3>
+            <p>One tap sends your GPS location to all contacts with an email alert instantly. No delay, no complexity.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="section stats-section" id="stats">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:40px;text-align:center;">
+        <div class="stat-item">
+          <span class="stat-number">10,000+</span>
+          <span class="stat-label">Active Users</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">5,200+</span>
+          <span class="stat-label">Incidents Reported</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">1,800+</span>
+          <span class="stat-label">SOS Alerts Sent</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">99.9%</span>
+          <span class="stat-label">System Uptime</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <h2 style="color:white;font-size:2.2rem;margin-bottom:12px;">Start Your Safe Journey Today</h2>
+      <p style="color:rgba(255,255,255,0.8);font-size:1.05rem;margin-bottom:32px;">Join thousands of women using SafeRoute to travel confidently.</p>
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+        <a href="register.html" class="btn btn-outline-white btn-lg">
+          <i class="fa-solid fa-user-plus"></i> Create Free Account
+        </a>
+        <a href="login.html" class="btn btn-lg" style="background:white;color:#e91e8c;font-weight:700;">
+          <i class="fa-solid fa-right-to-bracket"></i> Login
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="grid-4" style="gap:40px;">
+        <div>
+          <div class="footer-brand"><i class="fa-solid fa-shield-halved" style="color:#e91e8c;"></i> SafeRoute</div>
+          <p style="font-size:0.875rem;max-width:240px;">Intelligent Women's Safety and Emergency Response System. Travel safe, always.</p>
+        </div>
+        <div>
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="map.html">Safe Map</a></li>
+            <li><a href="report.html">Report Incident</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Account</h4>
+          <ul>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Sign Up</a></li>
+            <li><a href="contacts.html">Emergency Contacts</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Emergency</h4>
+          <ul>
+            <li><a href="#">Police: 15</a></li>
+            <li><a href="#">Ambulance: 1122</a></li>
+            <li><a href="#">Women Helpline: 1043</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 SafeRoute. All rights reserved.</p>
+        <p>Built with ❤️ for Women's Safety</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Redirect if already logged in
+    if (localStorage.getItem('saferoute_token')) {
+      // User is logged in, show a subtle indicator
+    }
+  </script>
+</body>
+</html>
